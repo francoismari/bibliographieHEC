@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <title>BiblioHEC</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <p class="navbar-text"><strong>Générateur de bibliographie</strong></p>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+      </nav>
+
+      <div style="margin-top: 50px;"><hr></div>
+      
+
+    <div class="container">
+
+                <div id="infoMessage" class="alert alert-primary" role="alert" style="display: none;"></div>
+                <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;"></div>
+                <div id="successMessage" class="alert alert-success" role="alert" style="display: none;"></div>
+            
+                <div class="form-group">
+                    <label for="sourceType">ℹ️ Quelle est ta source ?</label>
+                    <select id="sourceType" class="form-control" onchange="showFirstType()">
+                        <option selected>Selection</option>
+                        <option value="journalArticle">Article (revue, journal...)</option>
+                        <option value="blog">Billet de blog</option>
+                        <option value="conference">Conférence (document non publié)</option>
+                        <option value="fb">Facebook, Twitter</option>
+                        <option value="books">Livre, livre numérique, collectif etc.</option>
+                        <option value="law">Loi</option>
+                        <option value="multi">Multimédia</option>
+                        <option value="classNotes">Note de cours</option>
+                        <option value="gov">Publication gouvernementale (bientôt disponible)</option>
+                        <option value="textSection">Section d'un ouvrage ou texte dans une banque de donnée (bientôt disponible)</option>
+                        <option value="table">Tableau (bientôt disponible)</option>
+                        <option value="these">Thèse, rapport, document inédit (bientôt disponible)</option>
+                        <option value="webSite">Web - site (bientôt disponible)</option>
+                        <option value="webPage">Web - page (bientôt disponible)</option>
+                    </select>
+                </div>
+
+                
+                <div id="selectArticleType" class="form-group" style="display: none;">
+                    <label for="articleType">🗞 De quel type d'article s'agit-il ?</label>
+                    <select id="articleType" class="form-control" onchange="showArticlesTypes()">
+                        <option selected>Selection</option>
+                        <option value="revueArticle">Article de revue</option>
+                        <option value="journalJustArticle">Article de journal</option>
+                        <option value="journalTypeRevue">Article sur internet (revue)</option>
+                        <option value="journalTypeArticle">Article sur internet (journal)</option>
+                    </select>
+
+                    <hr>
+
+                    <div id="revueArticleSelected" style="display: none;">
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForRevueArticle" placeholder="Auteur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForRevueArticle" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForRevueArticle" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="RevueForRevueArticle" placeholder="Revue">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="volumeForReviewArticle" placeholder="Volume">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="numberForReviewArticle" placeholder="Numéro">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="pageForReviewArticle" placeholder="Page">
+                        </div>
+
+                        <button style="width: 100%" onclick="createArticleBiblio('revueArticle')" class="btn btn-primary">Valider</button>
+                        <br>
+                    </div>
+
+                    <div id="journalJustArticleSelected" style="display: none;">
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForjournalJustArticle" placeholder="Auteur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForjournalJustArticle" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="dateForjournalJustArticle" placeholder="Date">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForjournalJustArticle" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="journalForjournalJustArticle" placeholder="Journal">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="sectionForjournalJustArticle" placeholder="Section">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="pageForjournalJustArticle" placeholder="Page">
+                        </div>
+
+                        <button style="width: 100%" onclick="createArticleBiblio('journalJustArticle')" class="btn btn-primary">Valider</button>
+                        <br>
+
+                    </div>
+
+                    <div id="journalTypeRevueSelected" style="display: none;">
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForjournalTypeRevue" placeholder="Auteur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForjournalTypeRevue" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForjournalTypeRevue" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="periodTitleForjournalTypeRevue" placeholder="Titre du périodique">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="volumeForjournalTypeRevue" placeholder="Volume">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="numberForjournalTypeRevue" placeholder="Numéro">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fromForjournalTypeRevue" placeholder="Récupéré de (URL)">
+                        </div>
+
+                        <button style="width: 100%" onclick="createArticleBiblio('journalTypeRevue')" class="btn btn-primary">Valider</button>
+                        <br>
+
+                    </div>
+
+                    <div id="journalTypeArticleSelected" style="display: none;">
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForjournalTypeArticle" placeholder="Auteur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForjournalTypeArticle" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="dateForjournalTypeArticle" placeholder="Date">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForjournalTypeArticle" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="journalTitleForjournalTypeArticle" placeholder="Titre du journal">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="sectionForjournalTypeArticle" placeholder="Section">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fromForjournalTypeArticle" placeholder="Récupéré de (URL)">
+                        </div>
+
+                        <button style="width: 100%" onclick="createArticleBiblio('journalTypeArticle')" class="btn btn-primary">Valider</button>
+                        <br>
+
+                    </div>
+
+                </div>
+                <br>
+                
+                <div id="selectBlog" style="display: none;">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="authorForblog" placeholder="Auteur">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dateForBlog" placeholder="Date de publication ou de mise à jour">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="billetTitleForBlog" placeholder="Titre du billet">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="fromForBlog" placeholder="Récupéré de (URL)">
+                    </div>
+
+                    <button style="width: 100%" onclick="createBlogBiblio()" class="btn btn-primary">Valider</button>
+                    <br>
+
+                </div>
+
+                <div id="selectConference" style="display: none;">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="authorForConf" placeholder="Conférencier">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="yearForConf" placeholder="Année">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="titleForConf" placeholder="Titre">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="congresNameForConf" placeholder="Nom du congrès">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="cityForConf" placeholder="Ville">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="dateForConf" placeholder="Date">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="institutionForConf" placeholder="Institution">
+                    </div>
+
+                    <button style="width: 100%" onclick="createConferenceBiblio()" class="btn btn-primary">Valider</button>
+                    <br>
+
+                </div>
+
+                <div id="selectFb" style="display: none;">
+                    <div id="selectWhichFB" class="form-group">
+                        <label for="whichFB">De quel type de post s'agit-t-il ?</label>
+                        <select id="whichFB" class="form-control" onchange="showFBTypes()">
+                            <option selected>Selection</option>
+                            <option value="gazouillisSelect">Gazouillis</option>
+                            <option value="fbPageSelect">Page Facebook</option>
+                        </select>
+                    </div>
+                    
+                    <div id="gazouilliSelected" style="display: none;">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="gazouilliAuthor" placeholder="Auteur">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="gazouilliDate" placeholder="Date">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="gazouilliTitle" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="gazouilliFrom" placeholder="Récupéré de (URL)">
+                        </div>
+    
+                        <button style="width: 100%" onclick="createFBBiblio('gazouilli')" class="btn btn-primary">Valider</button>
+                    </div>
+
+                    <div id="fbPageSelected" style="display: none;">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fbAuthor" placeholder="Auteur">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fbDate" placeholder="Date">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fbTitle" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fbFrom" placeholder="Récupéré de (URL)">
+                        </div>
+    
+                        <button style="width: 100%" onclick="createFBBiblio('fbPage')" class="btn btn-primary">Valider</button>
+                    </div>
+                </div>
+
+                <div id="selectBooks" style="display: none;">
+                    <div id="selectWhichBookType" class="form-group">
+                        <label for="whichBookType">📖 De quel type de livre s'agit-il ?</label>
+                        <select id="whichBookType" class="form-control" onchange="showBookTypes()">
+                            <option selected>Selection</option>
+                            <option value="encyclopediaSelect">Livre, dictionnaire ou encyclopédie</option>
+                            <option value="collectiveBookSelect">Ouvrage collectif</option>
+                            <option value="onlineFreeBookSelect">Livre en ligne gratuit</option>
+                        </select>
+                    </div>
+                    
+                    <div id="dictionnaryOrEncyclopediaSection" style="display: none;">
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForDictionnary" placeholder="Auteur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForDictionnary" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForDictionnary" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editionForDictionnary" placeholder="Édition (numéro)">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="volumeForDictionnary" placeholder="Volume">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="cityForDictionnary" placeholder="Ville">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editorForDictionnary" placeholder="Éditeur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="collectionForDictionnary" placeholder="Nom de la collection">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="pageForDictionnary" placeholder="Page">
+                        </div>
+    
+                        <button style="width: 100%" onclick="createBookBiblio('dictionnary')" class="btn btn-primary">Valider</button>
+
+                    </div>
+                    
+                    <div id="openBookSection" style="display: none;">
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="directorForOpenBook" placeholder="Directeur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForOpenBook" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForOpenBook" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editionForOpenBook" placeholder="Édition (numéro)">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="cityForOpenBook" placeholder="Ville">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editorForOpenBook" placeholder="Éditeur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="collectionForOpenBook" placeholder="Nom de la collection">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="pageForOpenBook" placeholder="Page">
+                        </div>
+
+                        <button style="width: 100%" onclick="createBookBiblio('openBook')" class="btn btn-primary">Valider</button>
+                    </div>
+                    
+                    <div id="freeBookSection" style="display: none;">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForFreeBook" placeholder="Auteur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForFreeBook" placeholder="Année">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForFreeBook" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editionForFreeBook" placeholder="Édition (numéro)">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="volumeForFreeBook" placeholder="Volume">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="cityForFreeBook" placeholder="Ville">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editorForFreeBook" placeholder="Éditeur">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="collectionForFreeBook" placeholder="Collection">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fromForFreeBook" placeholder="Récupéré de (URL)">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="pageForFreeBook" placeholder="Page">
+                        </div>
+
+                        <button style="width: 100%" onclick="createBookBiblio('freeBook')" class="btn btn-primary">Valider</button>
+                    </div>
+                    
+                </div>
+
+                <div id="selectLaw" style="display: none;">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="govForLaw" placeholder="Gouvernement">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="yearForLaw" placeholder="Année">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="titleForLaw" placeholder="Titre">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="acroForLaw" placeholder="Acronyme">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="sectionForLaw" placeholder="Section">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="articleForLaw" placeholder="Article">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="urlForLaw" placeholder="URL">
+                    </div>
+
+                    <button style="width: 100%" onclick="createLawBiblio()" class="btn btn-primary">Valider</button>
+                </div>
+
+                <div id="selectMulti" style="display: none;">
+                    <div id="selectWhichMultiType" class="form-group">
+                        <label for="whichMultiType">📹 Quel type de multimédia ?</label>
+                        <select id="whichMultiType" class="form-control" onchange="showMultiTypes()">
+                            <option selected>Selection</option>
+                            <option value="audiovisualMultimediaSelect">Audiovisuel</option>
+                            <option value="filmMultmediaSelect">Film / Vidéo</option>
+                            <option value="softwareMultimediaSelect">Logiciel</option>
+                        </select>
+                    </div>
+                    
+                    <div id="audioVisualMultimedia" style="display: none;">
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="authorForAudioMulti" placeholder="Auteur">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForAudioMulti" placeholder="Année">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForAudioMulti" placeholder="Titre">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="typeForAudioMulti" placeholder="Type de contenu">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editorForAudioMulti" placeholder="Éditeur">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="urlForAudioMulti" placeholder="Récupéré de (URL)">
+                        </div>
+    
+                        <button style="width: 100%" onclick="createMultimediaBiblio('audioVisual')" class="btn btn-primary">Valider</button>
+                    </div>
+                    
+                    <div id="filmMultimedia" style="display: none;">
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="directorForFilmMulti" placeholder="Réalisateur">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="dateForFilmMulti" placeholder="Date de parution">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForFilmMulti" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="mediaTypeForFilmMulti" placeholder="Type de média (émission télévisée, film...)">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="serieTitleForFilmMulti" placeholder="Titre de la série">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="countryForFilmMulti" placeholder="Pays">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="producerForFilmMulti" placeholder="Producteur">
+                        </div>
+
+                        <button style="width: 100%" onclick="createMultimediaBiblio('film')" class="btn btn-primary">Valider</button>
+                    </div>
+                    
+                    <div id="softwareMultimedia" style="display: none;">
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="programmerForSoftwareMulti" placeholder="Développeur">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="yearForSoftwareMulti" placeholder="Année">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="titleForSoftwareMulti" placeholder="Titre">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="versionForSoftwareMulti" placeholder="Version">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="typeForSoftwareMulti" placeholder="Type">
+                        </div>
+    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="cityForSoftwareMulti" placeholder="Ville">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="editorForSoftwareMulti" placeholder="Éditeur">
+                        </div>
+
+                        <button style="width: 100%" onclick="createMultimediaBiblio('software')" class="btn btn-primary">Valider</button>
+                    </div>
+                    
+                </div>
+
+                <div id="selectClassNotes" style="display: none;">
+                    <p>Important : Toujours vérifier si des notes de cours peuvent être utilisées dans le cadre de votre travail. De plus, assurez-vous que ce que vous citez provient bien de l'enseignant. Si ce dernier parle de la théorie de M. Y, il faudra retrouver le document de M. Y et citer ce dernier.</p>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="profNameForClassNotes" placeholder="Nom du professeur">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="yearForClassNotes" placeholder="Année">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="classNumberForClassNotes" placeholder="Numéro du cours">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="classTitleForClassNotes" placeholder="Titre du cours">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="seanceTitleForClassNotes" placeholder="Titre de la séance ou numéro du cours">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="documentTypeForClassNotes" placeholder="Type de document">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="institutionForClassNotes" placeholder="Institution">
+                    </div>
+
+                    <button style="width: 100%" onclick="createClassNotesBiblio()" class="btn btn-primary">Valider</button>
+                </div>
+
+                <div id="govPublication" style="display: none;">
+                    <div style="text-align: center;">Bientôt disponible ✌🏻</div>
+                </div>
+
+                <div id="ouvrageOrBDD" style="display: none;">
+                    <div style="text-align: center;">Bientôt disponible ✌🏻</div>
+                </div>
+
+                <div id="tableSelect" style="display: none;">
+                    <div style="text-align: center;">Bientôt disponible ✌🏻</div>
+                </div>
+
+                <div id="theseSelect" style="display: none;">
+                    <div style="text-align: center;">Bientôt disponible ✌🏻</div>
+                </div>
+
+                <div id="webSiteSelect" style="display: none;">
+                    <div style="text-align: center;">Bientôt disponible ✌🏻</div>
+                </div>
+
+                <div id="webPageSelect" style="display: none;">
+                    <div style="text-align: center;">Bientôt disponible ✌🏻</div>
+                </div>
+
+    </div>
+
+    <script src="js/index.js"></script>
+    <script src="js/createBiblio.js"></script>
+</body>
+</html>
