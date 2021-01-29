@@ -354,7 +354,7 @@ let createWebPageBiblio = () => {
 
     if(author != '' || year != '' || title != '' || siteTitle != '')
     {
-        webPageBiblio = siteTitle + ' (' + year + '). <i>' + title + '</i>, ' + siteTitle + '. Récupéré le ' + currentDate + ' de ' + url;
+        webPageBiblio = author + ' (' + year + '). <i>' + title + '</i>, ' + siteTitle + '. Récupéré le ' + currentDate + ' de ' + url;
         showSuccessMessage(webPageBiblio);
     }
     else {
