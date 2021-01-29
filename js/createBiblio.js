@@ -342,3 +342,22 @@ let createClassNotesBiblio = () => {
         showErrorMessage("Le nom du professeur, l'année, le titre ou le numéro de la classe n'a pas été renseigné");
     }
 }
+
+
+let createWebPageBiblio = () => {
+    let author = document.getElementById('authorForWebPage').value;
+    let year = document.getElementById('yearForWebPage').value;
+    let title = document.getElementById('titleForWebPage').value;
+    let siteTitle = document.getElementById('siteTitleForWebPage').value;
+    let currentDate = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+    let url = document.getElementById('urlForWebPage').value;
+
+    if(author != '' || year != '' || title != '' || siteTitle != '')
+    {
+        webPageBiblio = siteTitle + ' (' + year + '). <i>' + title + '</i>, ' + siteTitle + '. Récupéré le ' + currentDate + ' de ' + url;
+        showSuccessMessage(webPageBiblio);
+    }
+    else {
+        showErrorMessage("L'auteur, l'année, ou le titre du site/page n'a pas été renseigné");
+    }
+}
